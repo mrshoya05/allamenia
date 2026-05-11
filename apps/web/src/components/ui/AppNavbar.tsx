@@ -2,7 +2,9 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { MessageCircle } from "lucide-react";
 import { NotificationBell } from "../notifications/NotificationBell";
+import { useWs } from "@/contexts/WebSocketContext";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 interface NavProfile { username: string; full_name: string | null; avatar_url: string | null; }
@@ -22,6 +24,7 @@ export function AppNavbar() {
   const [profile, setProfile] = useState<NavProfile | null>(null);
   const [open, setOpen] = useState(false);
   const dropRef = useRef<HTMLDivElement>(null);
+  const { unreadMessages } = useWs();
 
   useEffect(() => {
     const token = typeof window !== "undefined" ? localStorage.getItem("allamenia_access_token") : null;
@@ -63,6 +66,14 @@ export function AppNavbar() {
 
         {/* Right */}
         <div className="flex items-center gap-3">
+          <Link href="/messages" className="p-2.5 rounded-xl hover:bg-[#1d1f23] transition-all group relative">
+            <MessageCircle className="w-5 h-5 text-[#71767b] group-hover:text-[#e7e9ea] transition-colors" />
+            {unreadMessages > 0 && (
+              <span className="absolute top-1 right-1 min-w-[18px] h-[18px] bg-[#1d9bf0] text-white text-[11px] font-bold rounded-full flex items-center justify-center px-1">
+                {unreadMessages > 99 ? "99+" : unreadMessages}
+              </span>
+            )}
+          </Link>
           <NotificationBell />
 
           {/* Profile dropdown */}

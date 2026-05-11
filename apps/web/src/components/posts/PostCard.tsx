@@ -6,6 +6,7 @@ import { PostActions } from "./PostActions";
 import { PostMedia } from "./PostMedia";
 import { LinkPreview } from "./LinkPreview";
 import { CommentsModal } from "./CommentsModal";
+import { usePostView } from "@/hooks/usePostView";
 
 interface Post {
   id: string;
@@ -105,15 +106,26 @@ function formatTime(dateString: string, mounted: boolean = true): string {
 export function PostCard({ post, onLike, onUnlike, onRepost, onBookmark, onDelete }: PostCardProps) {
   const [showMenu, setShowMenu] = useState(false);
   const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
   const [showComments, setShowComments] = useState(false);
+  const [viewsCount, setViewsCount] = useState(post.views_count);
+
+  useEffect(() => { setMounted(true); }, []);
+
+  // Track view with Intersection Observer - 2s dwell, 50% visible
+  // Returns ref to attach to article element
+  const articleRef = usePostView({
+    postId: post.id,
+    enabled: mounted,
+    dwellTime: 2000,
+    threshold: 0.5,
+    onViewed: () => setViewsCount(v => v + 1), // optimistic update
+  });
+
+  // Remove the duplicate observer - usePostView handles everything
 
   return (
     <>
-      <article className="border-b border-slate-800/50 hover:bg-slate-900/30 transition-colors">
+      <article ref={articleRef as React.RefObject<HTMLElement>} className="border-b border-slate-800/50 hover:bg-slate-900/30 transition-colors">
         {/* Content Container - centered */}
         <div className="max-w-2xl mx-auto px-4 py-4">
           {/* Header */}
@@ -159,9 +171,20 @@ export function PostCard({ post, onLike, onUnlike, onRepost, onBookmark, onDelet
                     onClick={() => setShowMenu(false)}
                   />
                   <div className="absolute right-0 top-full mt-1 w-56 bg-slate-950 border border-slate-800 rounded-xl shadow-2xl overflow-hidden z-20">
-                    <button className="w-full px-4 py-3 text-left text-[15px] text-slate-300 hover:bg-slate-900 transition-colors flex items-center gap-3">
+                    <button
+                      onClick={() => {
+                        const url = `${window.location.origin}/post/${post.id}`;
+                        if (navigator.share) {
+                          navigator.share({ url });
+                        } else {
+                          navigator.clipboard.writeText(url);
+                        }
+                        setShowMenu(false);
+                      }}
+                      className="w-full px-4 py-3 text-left text-[15px] text-slate-300 hover:bg-slate-900 transition-colors flex items-center gap-3"
+                    >
                       <Share2 className="w-[18px] h-[18px]" />
-                      Share post
+                      Copy link
                     </button>
                     {onDelete && (
                       <button
@@ -214,6 +237,13 @@ export function PostCard({ post, onLike, onUnlike, onRepost, onBookmark, onDelet
               onBookmark={onBookmark}
               onComment={() => setShowComments(true)}
             />
+            {/* Views count */}
+            {viewsCount > 0 && (
+              <div className="flex items-center gap-1 mt-1 text-[12px] text-slate-600">
+                <Eye className="w-3.5 h-3.5" />
+                <span>{viewsCount.toLocaleString()} views</span>
+              </div>
+            )}
           </div>
         </div>
       </article>

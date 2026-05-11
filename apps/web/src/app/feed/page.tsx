@@ -75,8 +75,19 @@ export default function FeedPage() {
   };
 
   const handleRepost = async (postId: string) => {
-    await actions.repost(postId);
-    currentData.refresh?.();
+    const post = currentData.posts.find((p: any) => p.id === postId);
+    const updatePosts = (posts: any[]) =>
+      posts.map(p => p.id === postId
+        ? { ...p, is_reposted: !p.is_reposted, reposts_count: p.is_reposted ? p.reposts_count - 1 : p.reposts_count + 1 }
+        : p);
+
+    if (activeTab === "foryou") feedData.setPosts(updatePosts);
+
+    if (post?.is_reposted) {
+      await actions.unrepost(postId);
+    } else {
+      await actions.repost(postId);
+    }
   };
 
   const handleBookmark = async (postId: string) => {

@@ -22,6 +22,7 @@ export default function FollowersPage() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [profileName, setProfileName] = useState(username);
+  const [isOwnProfile, setIsOwnProfile] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("allamenia_access_token");
@@ -42,6 +43,13 @@ export default function FollowersPage() {
       const uid = profile.id;
       setUserId(uid);
       setProfileName(profile.full_name || profile.username);
+
+      // Check if own profile
+      const meRes = await fetch(`${API}/users/me`, { headers });
+      if (meRes.ok) {
+        const me = await meRes.json();
+        setIsOwnProfile(me.username === username);
+      }
 
       // Fetch both lists in parallel
       const [frsRes, fngRes] = await Promise.all([
@@ -89,6 +97,16 @@ export default function FollowersPage() {
     });
     setFollowers(u => u.filter(x => x.id !== targetUserId));
     setFollowing(u => u.filter(x => x.id !== targetUserId));
+  };
+
+  // Remove a follower from YOUR followers list (only on own profile)
+  const handleRemoveFollower = async (targetUserId: string) => {
+    const token = localStorage.getItem("allamenia_access_token");
+    await fetch(`${API}/follows/remove/${targetUserId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setFollowers(u => u.filter(x => x.id !== targetUserId));
   };
 
   const getFollowStatus = (user: any): "none" | "pending" | "following" => {
@@ -193,6 +211,7 @@ export default function FollowersPage() {
               onFollow={() => handleFollow(user.id)}
               onUnfollow={() => handleUnfollow(user.id)}
               onBlock={() => handleBlock(user.id)}
+              onRemoveFollower={isOwnProfile && tab === "followers" ? () => handleRemoveFollower(user.id) : undefined}
             />
           ))
         )}

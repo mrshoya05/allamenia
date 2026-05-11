@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Loader2, MoreHorizontal, UserMinus, ShieldOff, Clock } from "lucide-react";
+import { Loader2, MoreHorizontal, UserMinus, ShieldOff, Clock, UserX } from "lucide-react";
 import { Avatar } from "../ui/Avatar";
 import Link from "next/link";
 
@@ -23,9 +23,10 @@ interface UserCardProps {
   onFollow: () => Promise<{ status?: string } | void>;
   onUnfollow: () => Promise<void> | void;
   onBlock: () => Promise<void> | void;
+  onRemoveFollower?: () => Promise<void> | void;
 }
 
-export function UserCard({ user, followStatus = "none", onFollow, onUnfollow, onBlock }: UserCardProps) {
+export function UserCard({ user, followStatus = "none", onFollow, onUnfollow, onBlock, onRemoveFollower }: UserCardProps) {
   const [status, setStatus] = useState<FollowStatus>(followStatus);
   const [loading, setLoading] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -157,6 +158,18 @@ export function UserCard({ user, followStatus = "none", onFollow, onUnfollow, on
                   >
                     <UserMinus className="w-4 h-4" />
                     {status === "pending" ? "Cancel request" : `Unfollow @${user.username}`}
+                  </button>
+                )}
+                {onRemoveFollower && (
+                  <button
+                    onClick={async () => {
+                      setShowMenu(false);
+                      await onRemoveFollower();
+                    }}
+                    className="w-full px-4 py-3 text-left text-[15px] text-[#e7e9ea] hover:bg-[#1d1f23] flex items-center gap-3"
+                  >
+                    <UserX className="w-4 h-4" />
+                    Remove follower
                   </button>
                 )}
                 <button
