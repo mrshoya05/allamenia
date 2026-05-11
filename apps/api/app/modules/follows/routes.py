@@ -54,6 +54,20 @@ async def unfollow_user(
     return result
 
 
+@router.delete("/remove/{follower_id}", response_model=FollowResponse)
+async def remove_follower(
+    follower_id: str,
+    current_user: Annotated[dict, Depends(get_current_user)],
+):
+    """Remove a follower from your followers list (Instagram-style)"""
+    service = get_follow_service()
+    # The follower is unfollowing the current user
+    result = service.unfollow_user(follower_id, str(current_user["_id"]))
+    if not result["success"]:
+        raise HTTPException(status_code=400, detail=result["message"])
+    return result
+
+
 @router.get("/status/{user_id}", response_model=FollowStatusResponse)
 async def get_follow_status(
     user_id: str,

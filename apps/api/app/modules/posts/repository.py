@@ -97,11 +97,13 @@ class PostRepository:
     # ─── Feed Queries ─────────────────────────────────────────────────────────
 
     def get_feed(self, user_ids: List[str], skip: int = 0, limit: int = 20) -> List[dict]:
-        """Get posts from followed users"""
+        """Get posts from followed users - only original posts, no replies"""
         posts = list(self.posts.find(
             {
                 "author_id": {"$in": user_ids},
                 "is_deleted": False,
+                "is_repost": False,
+                "reply_to_post_id": None,  # Exclude replies/comments
                 "visibility": {"$in": ["public", "followers"]}
             }
         ).sort("created_at", -1).skip(skip).limit(limit))
@@ -109,9 +111,13 @@ class PostRepository:
         return [serialize_doc(post) for post in posts]
 
     def get_user_posts(self, user_id: str, skip: int = 0, limit: int = 20) -> List[dict]:
-        """Get user's posts"""
+        """Get user's original posts (no replies)"""
         posts = list(self.posts.find(
-            {"author_id": user_id, "is_deleted": False}
+            {
+                "author_id": user_id,
+                "is_deleted": False,
+                "reply_to_post_id": None,  # Exclude replies
+            }
         ).sort("created_at", -1).skip(skip).limit(limit))
         
         return [serialize_doc(post) for post in posts]
@@ -269,11 +275,34 @@ class PostRepository:
     # ─── Views ────────────────────────────────────────────────────────────────
 
     def track_view(self, post_id: str, user_id: str = None, ip_address: str = None) -> bool:
-        """Track post view"""
+        """Track post view - deduplicated per user per 24h"""
+        from datetime import timedelta
+        cutoff = datetime.utcnow() - timedelta(hours=24)
+
+        # Dedup: same user + same post within 24h = skip
+        if user_id:
+            already_viewed = self.views.count_documents({
+                "user_id": user_id,
+                "post_id": post_id,
+                "created_at": {"$gte": cutoff},
+            })
+            if already_viewed:
+                return False
+        else:
+            # Anonymous: dedup by IP within 1h
+            if ip_address:
+                cutoff_ip = datetime.utcnow() - timedelta(hours=1)
+                already_viewed = self.views.count_documents({
+                    "ip_address": ip_address,
+                    "post_id": post_id,
+                    "created_at": {"$gte": cutoff_ip},
+                })
+                if already_viewed:
+                    return False
+
         view_doc = create_view_document(post_id, user_id, ip_address)
         self.views.insert_one(view_doc)
-        
-        # Increment view count
+
         self.posts.update_one(
             {"_id": ObjectId(post_id)},
             {"$inc": {"views_count": 1}}

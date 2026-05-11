@@ -39,7 +39,15 @@ async def block_user(
     if not success:
         return {"success": False, "message": "User already blocked"}
     
-    # TODO: Unfollow both ways when blocking
+    # Unfollow both ways when blocking
+    from ..follows.repository import FollowRepository
+    follow_repo = FollowRepository(db)
+    follow_repo.unfollow_user(blocker_id, user_id)
+    follow_repo.unfollow_user(user_id, blocker_id)
+    # Update follower/following counts
+    from ..users import repository as u_repo
+    u_repo.decrement_followers_count(user_id)
+    u_repo.decrement_following_count(blocker_id)
     
     return {"success": True, "message": "User blocked successfully"}
 

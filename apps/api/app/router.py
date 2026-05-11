@@ -10,6 +10,7 @@ from app.modules.posts.routes import router as posts_router
 from app.modules.blocks.routes import router as blocks_router
 from app.modules.notifications.routes import router as notifications_router
 from app.modules.comments.routes import router as comments_router
+from app.modules.messages.routes import router as messages_router
 
 # Create main API router
 api_router = APIRouter()
@@ -19,6 +20,7 @@ api_router.include_router(user_router, tags=["users"])
 api_router.include_router(follow_router, tags=["follows"])
 api_router.include_router(posts_router, tags=["posts"])
 api_router.include_router(comments_router, tags=["comments"])
+api_router.include_router(messages_router, tags=["messages"])
 api_router.include_router(blocks_router, tags=["blocks"])
 api_router.include_router(notifications_router, tags=["notifications"])
 

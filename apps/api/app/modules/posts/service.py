@@ -106,9 +106,8 @@ class PostService:
         """Get personalized feed for user"""
         skip = (page - 1) * limit
 
-        # Get users that current user follows
+        # Get users that current user follows (active only)
         following_ids = self.follow_repo.get_following(user_id, skip=0, limit=10000)
-        following_ids.append(user_id)  # Include own posts
 
         # Get blocked users (both ways)
         blocked_users = self.block_repo.get_all_blocked_users(user_id)
@@ -118,30 +117,43 @@ class PostService:
         # Filter out blocked users from following list
         following_ids = [uid for uid in following_ids if uid not in all_blocked]
 
-        # Get posts
-        posts = self.post_repo.get_feed(following_ids, skip=skip, limit=limit)
+        # Feed includes: own posts + posts from people you follow
+        feed_user_ids = following_ids + [user_id]
 
-        # Enrich posts
+        # Get posts
+        posts = self.post_repo.get_feed(feed_user_ids, skip=skip, limit=limit)
+
+        # Enrich posts with visibility check
         enriched_posts = []
         for post in posts:
-            # Skip if author is blocked
+            # Skip blocked authors
             if post["author_id"] in all_blocked:
                 continue
-                
+
+            # Private account visibility:
+            # - Own posts: always visible
+            # - Following: visible if visibility is "public" or "followers"
+            # - Not following: only "public" visible (shouldn't happen since we only fetch following)
+            if post["author_id"] != user_id:
+                if post.get("visibility") == "private":
+                    continue
+                # "followers" visibility - only show if actively following
+                if post.get("visibility") == "followers" and post["author_id"] not in following_ids:
+                    continue
+
             enriched = self._enrich_post_with_author(post)
             enriched["is_liked"] = self.post_repo.is_liked(user_id, post["id"])
             enriched["is_bookmarked"] = self.post_repo.is_bookmarked(user_id, post["id"])
             enriched["is_reposted"] = self.post_repo.is_reposted(user_id, post["id"])
             enriched_posts.append(enriched)
 
-        total = len(following_ids) * 100  # Rough estimate
         has_more = len(posts) == limit
 
         return {
             "posts": enriched_posts,
             "page": page,
             "limit": limit,
-            "total": total,
+            "total": len(enriched_posts),
             "has_more": has_more,
         }
 

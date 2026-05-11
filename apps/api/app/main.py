@@ -46,6 +46,10 @@ app.mount("/media", StaticFiles(directory="media"), name="media")
 # Include centralized API router
 app.include_router(api_router, prefix="/api/v1")
 
+# ── WebSocket must be registered directly on app (not via nested APIRouter) ──
+from app.modules.messages.routes import websocket_endpoint
+app.add_api_websocket_route("/api/v1/messages/ws/{token}", websocket_endpoint)
+
 
 @app.get("/")
 def root():
