@@ -45,3 +45,4 @@ venv/
 __pycache__/
 *.pyc
 .env
+apturl==0.5.2
