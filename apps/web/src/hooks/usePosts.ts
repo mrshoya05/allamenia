@@ -56,8 +56,8 @@ export function useTrending() {
     try {
       setLoading(true);
       setError(null);
-      const posts = await postsApi.getTrending();
-      setPosts(posts);
+      const trendingPosts = await postsApi.getTrending();
+      setPosts(trendingPosts);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load trending");
     } finally {

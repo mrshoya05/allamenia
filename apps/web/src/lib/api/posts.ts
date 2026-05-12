@@ -42,18 +42,23 @@ export interface CreatePostData {
   reply_to_post_id?: string;
 }
 
+export interface PaginatedPostsResponse {
+  posts: Post[];
+  has_more: boolean;
+}
+
 export const postsApi = {
   getFeed: (page = 1, limit = 20) =>
-    apiFetchJson(`/posts?page=${page}&limit=${limit}`),
+    apiFetchJson<PaginatedPostsResponse>(`/posts?page=${page}&limit=${limit}`),
 
   getTrending: (hours = 24, limit = 20) =>
-    apiFetchJson(`/posts/trending?hours=${hours}&limit=${limit}`),
+    apiFetchJson<Post[]>(`/posts/trending?hours=${hours}&limit=${limit}`),
 
   getBookmarks: (page = 1, limit = 20) =>
-    apiFetchJson(`/posts/bookmarks?page=${page}&limit=${limit}`),
+    apiFetchJson<PaginatedPostsResponse>(`/posts/bookmarks?page=${page}&limit=${limit}`),
 
   createPost: (data: CreatePostData) =>
-    apiFetchJson("/posts", {
+    apiFetchJson<Post>("/posts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
