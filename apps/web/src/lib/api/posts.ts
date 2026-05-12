@@ -1,12 +1,4 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
-
-function getAuthHeaders() {
-  const token = localStorage.getItem("allamenia_access_token");
-  return {
-    "Content-Type": "application/json",
-    ...(token && { Authorization: `Bearer ${token}` }),
-  };
-}
+import { apiFetch, apiFetchJson } from "./fetch";
 
 export interface Post {
   id: string;
@@ -45,115 +37,58 @@ export interface Post {
 
 export interface CreatePostData {
   content: string;
-  media?: Array<{
-    type: string;
-    url: string;
-    width?: number;
-    height?: number;
-  }>;
+  media?: Array<{ type: string; url: string; width?: number; height?: number }>;
   visibility?: "public" | "followers" | "private";
   reply_to_post_id?: string;
 }
 
 export const postsApi = {
-  async getFeed(page: number = 1, limit: number = 20) {
-    const res = await fetch(`${API_BASE}/posts?page=${page}&limit=${limit}`, {
-      headers: getAuthHeaders(),
-    });
-    if (!res.ok) throw new Error("Failed to fetch feed");
-    return await res.json();
-  },
+  getFeed: (page = 1, limit = 20) =>
+    apiFetchJson(`/posts?page=${page}&limit=${limit}`),
 
-  async getTrending(hours: number = 24, limit: number = 20) {
-    const res = await fetch(`${API_BASE}/posts/trending?hours=${hours}&limit=${limit}`, {
-      headers: getAuthHeaders(),
-    });
-    if (!res.ok) throw new Error("Failed to fetch trending");
-    return await res.json();
-  },
+  getTrending: (hours = 24, limit = 20) =>
+    apiFetchJson(`/posts/trending?hours=${hours}&limit=${limit}`),
 
-  async getBookmarks(page: number = 1, limit: number = 20) {
-    const res = await fetch(`${API_BASE}/posts/bookmarks?page=${page}&limit=${limit}`, {
-      headers: getAuthHeaders(),
-    });
-    if (!res.ok) throw new Error("Failed to fetch bookmarks");
-    return await res.json();
-  },
+  getBookmarks: (page = 1, limit = 20) =>
+    apiFetchJson(`/posts/bookmarks?page=${page}&limit=${limit}`),
 
-  async createPost(data: CreatePostData) {
-    const res = await fetch(`${API_BASE}/posts`, {
+  createPost: (data: CreatePostData) =>
+    apiFetchJson("/posts", {
       method: "POST",
-      headers: getAuthHeaders(),
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
-    });
-    if (!res.ok) {
-      const error = await res.json();
-      throw new Error(error.detail || "Failed to create post");
-    }
-    return await res.json();
-  },
+    }),
 
-  async likePost(postId: string) {
-    const res = await fetch(`${API_BASE}/posts/${postId}/like`, {
+  likePost: (postId: string) =>
+    apiFetchJson(`/posts/${postId}/like`, { method: "POST" }),
+
+  unlikePost: (postId: string) =>
+    apiFetchJson(`/posts/${postId}/like`, { method: "DELETE" }),
+
+  repost: (postId: string, content = "") =>
+    apiFetchJson(`/posts/${postId}/repost`, {
       method: "POST",
-      headers: getAuthHeaders(),
-    });
-    if (!res.ok) throw new Error("Failed to like post");
-    return await res.json();
-  },
-
-  async unlikePost(postId: string) {
-    const res = await fetch(`${API_BASE}/posts/${postId}/like`, {
-      method: "DELETE",
-      headers: getAuthHeaders(),
-    });
-    if (!res.ok) throw new Error("Failed to unlike post");
-    return await res.json();
-  },
-
-  async repost(postId: string, content: string = "") {
-    const res = await fetch(`${API_BASE}/posts/${postId}/repost`, {
-      method: "POST",
-      headers: getAuthHeaders(),
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ content }),
-    });
-    if (!res.ok) throw new Error("Failed to repost");
-    return await res.json();
-  },
+    }),
 
-  async unrepost(postId: string) {
-    const res = await fetch(`${API_BASE}/posts/${postId}/repost`, {
-      method: "DELETE",
-      headers: getAuthHeaders(),
-    });
-    if (!res.ok) throw new Error("Failed to unrepost");
-    return await res.json();
-  },
+  unrepost: (postId: string) =>
+    apiFetchJson(`/posts/${postId}/repost`, { method: "DELETE" }),
 
-  async bookmarkPost(postId: string) {
-    const res = await fetch(`${API_BASE}/posts/${postId}/bookmark`, {
-      method: "POST",
-      headers: getAuthHeaders(),
-    });
-    if (!res.ok) throw new Error("Failed to bookmark post");
-    return await res.json();
-  },
+  bookmarkPost: (postId: string) =>
+    apiFetchJson(`/posts/${postId}/bookmark`, { method: "POST" }),
 
-  async unbookmarkPost(postId: string) {
-    const res = await fetch(`${API_BASE}/posts/${postId}/bookmark`, {
-      method: "DELETE",
-      headers: getAuthHeaders(),
-    });
-    if (!res.ok) throw new Error("Failed to unbookmark post");
-    return await res.json();
-  },
+  unbookmarkPost: (postId: string) =>
+    apiFetchJson(`/posts/${postId}/bookmark`, { method: "DELETE" }),
 
-  async deletePost(postId: string) {
-    const res = await fetch(`${API_BASE}/posts/${postId}`, {
-      method: "DELETE",
-      headers: getAuthHeaders(),
-    });
-    if (!res.ok) throw new Error("Failed to delete post");
-    return await res.json();
+  deletePost: (postId: string) =>
+    apiFetchJson(`/posts/${postId}`, { method: "DELETE" }),
+
+  uploadMedia: async (file: File): Promise<{ url: string; type: string; mime_type: string }> => {
+    const formData = new FormData();
+    formData.append("file", file);
+    const res = await apiFetch("/posts/upload-media", { method: "POST", body: formData });
+    if (!res.ok) throw new Error("Failed to upload media");
+    return res.json();
   },
 };

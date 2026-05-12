@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter, useParams, useSearchParams } from "next/navigation";
 import { ArrowLeft, Loader2, Search } from "lucide-react";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { AppNavbar } from "@/components/ui/AppNavbar";
 import { UserCard } from "@/components/people/UserCard";
 
@@ -10,6 +11,7 @@ const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 type TabType = "followers" | "following";
 
 export default function FollowersPage() {
+  useAuthGuard();
   const router = useRouter();
   const { username } = useParams() as { username: string };
   const searchParams = useSearchParams();
@@ -25,8 +27,6 @@ export default function FollowersPage() {
   const [isOwnProfile, setIsOwnProfile] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("allamenia_access_token");
-    if (!token) { router.push("/login"); return; }
     fetchUserAndLists();
   }, [username]);
 

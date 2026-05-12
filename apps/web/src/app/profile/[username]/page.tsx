@@ -7,6 +7,7 @@ import {
   BadgeCheck, MoreHorizontal, UserMinus, ShieldOff, UserX,
   Mail, ShieldCheck, UserPlus
 } from "lucide-react";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { AppNavbar } from "@/components/ui/AppNavbar";
 import { PostCard } from "@/components/posts/PostCard";
 import { usePostActions } from "@/hooks/usePosts";
@@ -15,6 +16,7 @@ const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 type FollowStatus = "none" | "pending" | "following";
 
 export default function PublicProfilePage() {
+  useAuthGuard();
   const router = useRouter();
   const { username } = useParams() as { username: string };
 

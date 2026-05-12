@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { AppNavbar } from "@/components/ui/AppNavbar";
 import { NotificationFeed } from "@/components/notifications/NotificationFeed";
 import { ArrowLeft, Bell, Heart, MessageCircle, Repeat2, UserPlus, Settings } from "lucide-react";
@@ -16,13 +17,12 @@ const TABS = [
 type TabKey = (typeof TABS)[number]["key"];
 
 export default function NotificationsPage() {
+  useAuthGuard();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabKey>("all");
   const [counts, setCounts] = useState<Record<string, number>>({});
 
   useEffect(() => {
-    const token = localStorage.getItem("allamenia_access_token");
-    if (!token) { router.push("/login"); return; }
     fetchCounts();
   }, []);
 

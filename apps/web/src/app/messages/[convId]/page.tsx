@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { ArrowLeft, Send, Loader2, Check, CheckCheck, ShieldAlert } from "lucide-react";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { useWs } from "@/contexts/WebSocketContext";
 import Link from "next/link";
 
@@ -27,6 +28,7 @@ function Avatar({ user, size = 36, online = false }: { user: any; size?: number;
 }
 
 export default function ChatPage() {
+  useAuthGuard();
   const router = useRouter();
   const { convId } = useParams() as { convId: string };
   const { send, connected, subscribe, unsubscribe, setUnreadMessages } = useWs();
@@ -90,8 +92,6 @@ export default function ChatPage() {
   }, [convId, subscribe, unsubscribe]);
 
   useEffect(() => {
-    const token = localStorage.getItem("allamenia_access_token");
-    if (!token) { router.push("/login"); return; }
     fetchData();
   }, [convId]);
 

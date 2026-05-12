@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { ArrowLeft, Loader2, Search } from "lucide-react";
 import { AppNavbar } from "@/components/ui/AppNavbar";
 import { UserCard } from "@/components/people/UserCard";
@@ -8,6 +9,7 @@ import { UserCard } from "@/components/people/UserCard";
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
 export default function PeoplePage() {
+  useAuthGuard();
   const router = useRouter();
   const [tab, setTab] = useState<"suggestions" | "search">("suggestions");
   const [users, setUsers] = useState<any[]>([]);
@@ -17,8 +19,6 @@ export default function PeoplePage() {
   const [searchLoading, setSearchLoading] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("allamenia_access_token");
-    if (!token) { router.push("/login"); return; }
     fetchSuggestions();
   }, []);
 

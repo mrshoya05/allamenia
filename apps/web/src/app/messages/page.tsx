@@ -1,6 +1,7 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { Loader2, MessageCircle, Edit, Search } from "lucide-react";
 import { AppNavbar } from "@/components/ui/AppNavbar";
 import { useWs } from "@/contexts/WebSocketContext";
@@ -40,6 +41,7 @@ function formatTime(dateStr: string) {
 }
 
 export default function MessagesPage() {
+  useAuthGuard();
   const router = useRouter();
   const [conversations, setConversations] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -47,8 +49,6 @@ export default function MessagesPage() {
   const { subscribe, unsubscribe } = useWs();
 
   useEffect(() => {
-    const token = localStorage.getItem("allamenia_access_token");
-    if (!token) { router.push("/login"); return; }
     fetchConversations();
   }, []);
 

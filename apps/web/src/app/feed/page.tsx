@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { AppNavbar } from "@/components/ui/AppNavbar";
 import { Feed } from "@/components/posts/Feed";
 import { VibeCheckWidget } from "@/components/sidebar/VibeCheckWidget";
@@ -11,6 +12,7 @@ import { MobileWidgetsDrawer } from "@/components/sidebar/MobileWidgetsDrawer";
 import { useFeed, useTrending, useBookmarks, useCreatePost, usePostActions } from "@/hooks/usePosts";
 
 export default function FeedPage() {
+  useAuthGuard();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<"foryou" | "trending" | "bookmarks">("foryou");
   
@@ -19,13 +21,6 @@ export default function FeedPage() {
   const bookmarksData = useBookmarks();
   const { createPost } = useCreatePost();
   const actions = usePostActions();
-
-  useEffect(() => {
-    const token = localStorage.getItem("allamenia_access_token");
-    if (!token) {
-      router.push("/login");
-    }
-  }, [router]);
 
   const getCurrentData = () => {
     switch (activeTab) {

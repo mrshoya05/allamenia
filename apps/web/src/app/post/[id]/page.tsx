@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { AppNavbar } from "@/components/ui/AppNavbar";
 import { PostCard } from "@/components/posts/PostCard";
 import { PostComposer } from "@/components/posts/PostComposer";
@@ -10,6 +11,7 @@ import { CommentsSection } from "@/components/comments/CommentsSection";
 import { usePostActions } from "@/hooks/usePosts";
 
 export default function PostDetailPage() {
+  useAuthGuard();
   const router = useRouter();
   const params = useParams();
   const postId = params.id as string;
@@ -20,11 +22,6 @@ export default function PostDetailPage() {
   const actions = usePostActions();
 
   useEffect(() => {
-    const token = localStorage.getItem("allamenia_access_token");
-    if (!token) {
-      router.push("/login");
-      return;
-    }
     fetchPost();
   }, [postId]);
 
