@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
     APP_NAME: str = "Allamenia"
     DEBUG: bool = False
+    BACKEND_URL: str
 
     class Config:
         env_file = ".env"

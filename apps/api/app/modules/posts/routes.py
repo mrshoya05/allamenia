@@ -19,6 +19,7 @@ from .schema import (
 )
 from ...core.dependencies import get_current_user
 from ...database.database import db
+from app.core.config import settings
 
 router = APIRouter(prefix="/posts", tags=["posts"])
 
@@ -38,7 +39,7 @@ async def upload_media(
     try:
         file_path = await save_file(file, "posts")
         # Convert local path to URL
-        file_url = f"http://localhost:8000/{file_path}"
+        file_url = f"{settings.BACKEND_URL.rstrip('/')}/{file_path.lstrip('/')}"
         return {
             "url": file_url,
             "type": file.content_type.split("/")[0] if file.content_type else "image",
@@ -79,8 +80,6 @@ async def create_post(
     post = service.get_post(result["post_id"], str(current_user["_id"]))
     if not post:
         raise HTTPException(status_code=500, detail="Post created but failed to retrieve")
-    
-    return post
     
     return post
 
