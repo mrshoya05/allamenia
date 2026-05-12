@@ -12,7 +12,7 @@ from app.modules.notifications.routes import router as notifications_router
 from app.modules.comments.routes import router as comments_router
 from app.modules.messages.routes import router as messages_router
 
-# Create main API router
+# Create main API routers
 api_router = APIRouter()
 
 # Include all module routers
