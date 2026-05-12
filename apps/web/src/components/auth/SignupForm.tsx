@@ -116,31 +116,33 @@ export function SignupForm() {
   };
 
   return (
-    <div className="w-full max-w-md anim-fade-up">
+    <div className="w-full anim-fade-up">
       {/* Step indicator */}
-      <div className="flex items-center gap-0 mb-10">
+      <div className="flex items-center mb-8 sm:mb-10">
         {STEPS.map((s, i) => (
           <div key={s.label} className="flex items-center">
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2">
               <div
-                className="w-8 h-8 flex items-center justify-center text-xs font-bold rounded-full transition-all duration-300"
+                className="w-8 h-8 flex items-center justify-center text-xs font-bold rounded-full transition-all duration-300 shrink-0"
                 style={{
-                  background: i < step ? "var(--accent)" : i === step ? "var(--bg-card)" : "var(--bg-card)",
-                  color: i < step ? "#0a0f14" : i === step ? "var(--accent)" : "var(--text-dim)",
-                  border: i === step ? "2px solid var(--accent)" : i < step ? "2px solid var(--accent)" : "1px solid var(--border)",
-                  boxShadow: i <= step ? "0 0 15px var(--accent-glow)" : "none",
+                  background: i < step ? "var(--accent)" : i === step ? "#0f1419" : "#0f1419",
+                  color: i < step ? "#0a0f14" : i === step ? "#10b981" : "#64748b",
+                  border: i === step ? "2px solid #10b981" : i < step ? "2px solid #10b981" : "1px solid rgba(148,163,184,0.1)",
+                  boxShadow: i <= step ? "0 0 15px rgba(16,185,129,0.3)" : "none",
                 }}
               >
                 {i < step ? "✓" : i + 1}
               </div>
-              {i === step && <span className="text-sm font-semibold text-slate-100 tracking-wide">{s.label}</span>}
+              {i === step && (
+                <span className="text-sm font-semibold text-slate-100 tracking-wide">{s.label}</span>
+              )}
             </div>
             {i < STEPS.length - 1 && (
               <div
-                className="w-7 h-0.5 mx-2 rounded-full transition-all duration-300"
+                className="w-6 sm:w-7 h-0.5 mx-1.5 sm:mx-2 rounded-full transition-all duration-300"
                 style={{
-                  background: i < step ? "var(--accent)" : "var(--border)",
-                  boxShadow: i < step ? "0 0 8px var(--accent-glow)" : "none",
+                  background: i < step ? "#10b981" : "rgba(148,163,184,0.1)",
+                  boxShadow: i < step ? "0 0 8px rgba(16,185,129,0.3)" : "none",
                 }}
               />
             )}
@@ -150,12 +152,12 @@ export function SignupForm() {
 
       <form onSubmit={next}>
         {step === 0 && (
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-4 sm:gap-5">
             <div>
-              <h1 className="text-4xl font-bold text-slate-50 tracking-tight mb-2">
+              <h1 className="text-3xl sm:text-4xl font-bold text-slate-50 tracking-tight mb-2">
                 Create account<span className="text-emerald-500">.</span>
               </h1>
-              <p className="text-slate-400">
+              <p className="text-slate-400 text-sm sm:text-base">
                 Already have one?{" "}
                 <Link href="/login" className="text-emerald-500 hover:text-emerald-400 font-semibold transition-colors">
                   Sign in
@@ -163,7 +165,7 @@ export function SignupForm() {
               </p>
             </div>
             <div className="mt-1">
-              <label className="block text-xs font-semibold text-slate-400 mb-2.5 uppercase tracking-wider">
+              <label className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wider">
                 Email
               </label>
               <input
@@ -172,11 +174,11 @@ export function SignupForm() {
                 placeholder="you@example.com"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="w-full px-4 py-3.5 bg-slate-900/50 border border-slate-800 rounded-xl text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all backdrop-blur-sm"
+                className="w-full px-4 py-3 sm:py-3.5 bg-slate-900/50 border border-slate-800 rounded-xl text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all text-sm sm:text-base"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-400 mb-2.5 uppercase tracking-wider">
+              <label className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wider">
                 Password
               </label>
               <div className="relative">
@@ -187,7 +189,7 @@ export function SignupForm() {
                   placeholder="Min. 6 characters"
                   value={form.password}
                   onChange={(e) => setForm({ ...form, password: e.target.value })}
-                  className="w-full px-4 py-3.5 pr-16 bg-slate-900/50 border border-slate-800 rounded-xl text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all backdrop-blur-sm"
+                  className="w-full px-4 py-3 sm:py-3.5 pr-16 bg-slate-900/50 border border-slate-800 rounded-xl text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all text-sm sm:text-base"
                 />
                 <button
                   type="button"
@@ -203,15 +205,15 @@ export function SignupForm() {
         )}
 
         {step === 1 && (
-          <div className="flex flex-col gap-5 anim-fade-up">
+          <div className="flex flex-col gap-4 sm:gap-5 anim-fade-up">
             <div>
-              <h1 className="text-4xl font-bold text-slate-50 tracking-tight mb-2">
+              <h1 className="text-3xl sm:text-4xl font-bold text-slate-50 tracking-tight mb-2">
                 Your profile<span className="text-emerald-500">.</span>
               </h1>
-              <p className="text-slate-400">How should people find you?</p>
+              <p className="text-slate-400 text-sm sm:text-base">How should people find you?</p>
             </div>
             <div className="mt-1">
-              <label className="block text-xs font-semibold text-slate-400 mb-2.5 uppercase tracking-wider">
+              <label className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wider">
                 Full name
               </label>
               <input
@@ -219,11 +221,11 @@ export function SignupForm() {
                 placeholder="Your name"
                 value={form.full_name}
                 onChange={(e) => setForm({ ...form, full_name: e.target.value })}
-                className="w-full px-4 py-3.5 bg-slate-900/50 border border-slate-800 rounded-xl text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all backdrop-blur-sm"
+                className="w-full px-4 py-3 sm:py-3.5 bg-slate-900/50 border border-slate-800 rounded-xl text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all text-sm sm:text-base"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-400 mb-2.5 uppercase tracking-wider">
+              <label className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wider">
                 Username
               </label>
               <div className="relative">
@@ -239,7 +241,7 @@ export function SignupForm() {
                   onChange={(e) =>
                     setForm({ ...form, username: e.target.value.toLowerCase().replace(/[^a-z0-9_.]/g, "") })
                   }
-                  className="w-full pl-9 pr-4 py-3.5 bg-slate-900/50 border border-slate-800 rounded-xl text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all backdrop-blur-sm"
+                  className="w-full pl-9 pr-4 py-3 sm:py-3.5 bg-slate-900/50 border border-slate-800 rounded-xl text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all text-sm sm:text-base"
                 />
               </div>
               <p className="text-xs text-slate-600 mt-2">Letters, numbers, _ and . only</p>
@@ -249,11 +251,11 @@ export function SignupForm() {
 
         {step === 2 && (
           <div className="anim-fade-up">
-            <div className="mb-7">
-              <h1 className="text-4xl font-bold text-slate-50 tracking-tight mb-2">
+            <div className="mb-6">
+              <h1 className="text-3xl sm:text-4xl font-bold text-slate-50 tracking-tight mb-2">
                 Your interests<span className="text-emerald-500">.</span>
               </h1>
-              <p className="text-slate-400">Pick at least 3 to personalize your feed.</p>
+              <p className="text-slate-400 text-sm sm:text-base">Pick at least 3 to personalize your feed.</p>
             </div>
             <div className="flex flex-wrap gap-2 mb-4">
               {INTERESTS.map((item) => {
@@ -263,12 +265,12 @@ export function SignupForm() {
                     key={item}
                     type="button"
                     onClick={() => toggle(item)}
-                    className="px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200"
+                    className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-xl transition-all duration-200"
                     style={{
-                      background: active ? "var(--accent)" : "rgba(15, 20, 25, 0.6)",
-                      color: active ? "#0a0f14" : "var(--text-secondary)",
-                      border: active ? "1px solid var(--accent)" : "1px solid var(--border)",
-                      boxShadow: active ? "0 0 20px var(--accent-glow)" : "none",
+                      background: active ? "#10b981" : "rgba(15, 20, 25, 0.6)",
+                      color: active ? "#0a0f14" : "#cbd5e1",
+                      border: active ? "1px solid #10b981" : "1px solid rgba(148,163,184,0.1)",
+                      boxShadow: active ? "0 0 20px rgba(16,185,129,0.3)" : "none",
                       transform: active ? "scale(1.05)" : "scale(1)",
                     }}
                   >
@@ -284,16 +286,16 @@ export function SignupForm() {
         )}
 
         {errorMsg && (
-          <div className="mt-4 px-4 py-3.5 bg-red-500/10 border border-red-500/25 rounded-xl text-sm text-red-400">
+          <div className="mt-4 px-4 py-3 bg-red-500/10 border border-red-500/25 rounded-xl text-sm text-red-400">
             {errorMsg}
           </div>
         )}
 
-        <div className="mt-8 flex flex-col gap-3">
+        <div className="mt-6 sm:mt-8 flex flex-col gap-3">
           <button
             type="submit"
             disabled={loading || (step === 2 && interests.length < 3)}
-            className="w-full py-4 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-semibold rounded-xl transition-all disabled:opacity-35 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40"
+            className="w-full py-3.5 sm:py-4 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-semibold rounded-xl transition-all disabled:opacity-35 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 text-sm sm:text-base"
           >
             {loading && <span className="w-4 h-4 border-2 border-slate-950/30 border-t-slate-950 rounded-full anim-spin" />}
             {loading ? "Creating..." : step < 2 ? "Continue →" : "Create account →"}

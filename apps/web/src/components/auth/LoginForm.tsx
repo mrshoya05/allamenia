@@ -41,11 +41,11 @@ export function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-md anim-fade-up">
-      <h1 className="text-4xl font-bold text-slate-50 tracking-tight mb-2">
+    <div className="w-full anim-fade-up">
+      <h1 className="text-3xl sm:text-4xl font-bold text-slate-50 tracking-tight mb-2">
         Welcome back<span className="text-emerald-500">.</span>
       </h1>
-      <p className="text-slate-400 mb-9">
+      <p className="text-slate-400 mb-7 sm:mb-9 text-sm sm:text-base">
         No account?{" "}
         <Link href="/signup" className="text-emerald-500 hover:text-emerald-400 font-semibold transition-colors">
           Sign up free
@@ -53,21 +53,21 @@ export function LoginForm() {
       </p>
 
       {/* OAuth */}
-      <div className="grid grid-cols-2 gap-3 mb-8">
+      <div className="grid grid-cols-2 gap-3 mb-6 sm:mb-8">
         {[
           ["G", "Google", "text-emerald-500"],
           ["⌥", "GitHub", "text-cyan-500"],
         ].map(([icon, name, color]) => (
           <button
             key={name}
-            className="flex items-center justify-center gap-2.5 py-3.5 text-sm font-medium text-slate-300 bg-slate-900/50 border border-slate-800 rounded-xl hover:bg-slate-900/70 hover:border-slate-700 transition-all backdrop-blur-sm"
+            className="flex items-center justify-center gap-2 py-3 sm:py-3.5 text-sm font-medium text-slate-300 bg-slate-900/50 border border-slate-800 rounded-xl hover:bg-slate-900/70 hover:border-slate-700 transition-all"
           >
             <span className={`font-bold ${color} text-base`}>{icon}</span> {name}
           </button>
         ))}
       </div>
 
-      <div className="flex items-center gap-4 mb-8">
+      <div className="flex items-center gap-4 mb-6 sm:mb-8">
         <div className="flex-1 h-px bg-slate-800" />
         <span className="text-xs text-slate-600 font-bold tracking-widest px-3 py-1 rounded-full bg-slate-900/50">
           OR
@@ -75,9 +75,9 @@ export function LoginForm() {
         <div className="flex-1 h-px bg-slate-800" />
       </div>
 
-      <form onSubmit={submit} className="flex flex-col gap-5">
+      <form onSubmit={submit} className="flex flex-col gap-4 sm:gap-5">
         <div>
-          <label className="block text-xs font-semibold text-slate-400 mb-2.5 uppercase tracking-wider">
+          <label className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wider">
             Email
           </label>
           <input
@@ -86,11 +86,11 @@ export function LoginForm() {
             placeholder="you@example.com"
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
-            className="w-full px-4 py-3.5 bg-slate-900/50 border border-slate-800 rounded-xl text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all backdrop-blur-sm"
+            className="w-full px-4 py-3 sm:py-3.5 bg-slate-900/50 border border-slate-800 rounded-xl text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all text-sm sm:text-base"
           />
         </div>
         <div>
-          <div className="flex justify-between mb-2.5">
+          <div className="flex justify-between mb-2">
             <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
               Password
             </label>
@@ -105,7 +105,7 @@ export function LoginForm() {
               placeholder="••••••••"
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
-              className="w-full px-4 py-3.5 pr-16 bg-slate-900/50 border border-slate-800 rounded-xl text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all backdrop-blur-sm"
+              className="w-full px-4 py-3 sm:py-3.5 pr-16 bg-slate-900/50 border border-slate-800 rounded-xl text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all text-sm sm:text-base"
             />
             <button
               type="button"
@@ -118,7 +118,7 @@ export function LoginForm() {
         </div>
 
         {error && (
-          <div className="px-4 py-3.5 bg-red-500/10 border border-red-500/25 rounded-xl text-sm text-red-400">
+          <div className="px-4 py-3 bg-red-500/10 border border-red-500/25 rounded-xl text-sm text-red-400">
             {error}
           </div>
         )}
@@ -126,7 +126,7 @@ export function LoginForm() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-4 mt-1 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-semibold rounded-xl transition-all disabled:opacity-60 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40"
+          className="w-full py-3.5 sm:py-4 mt-1 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-semibold rounded-xl transition-all disabled:opacity-60 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 text-sm sm:text-base"
         >
           {loading && <span className="w-4 h-4 border-2 border-slate-950/30 border-t-slate-950 rounded-full anim-spin" />}
           {loading ? "Signing in..." : "Sign in →"}

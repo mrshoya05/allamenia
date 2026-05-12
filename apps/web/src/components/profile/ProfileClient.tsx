@@ -2,6 +2,11 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import {
+  MapPin, Link2, Calendar, Mail, BadgeCheck, Lock,
+  Pencil, ShieldCheck, LogOut, Save, KeyRound,
+  AlertTriangle, CheckCircle, Sparkles, ArrowLeft,
+} from "lucide-react";
 import { AppNavbar } from "@/components/ui/AppNavbar";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
@@ -136,9 +141,11 @@ export function ProfileClient() {
   if (fetchError) return (
     <div className="min-h-screen flex items-center justify-center bg-slate-950">
       <div className="p-10 text-center max-w-sm bg-slate-900/50 border border-slate-800 rounded-xl backdrop-blur-sm">
-        <p className="text-4xl mb-3">⚠️</p>
+        <AlertTriangle className="w-10 h-10 text-red-400 mx-auto mb-3" />
         <p className="text-sm mb-5 text-red-400">{fetchError}</p>
-        <Link href="/feed" className="inline-block px-7 py-2.5 text-sm bg-slate-800/50 border border-slate-700 text-slate-200 rounded-xl hover:bg-slate-800 transition-all">← Back to feed</Link>
+        <Link href="/feed" className="inline-flex items-center gap-2 px-7 py-2.5 text-sm bg-slate-800/50 border border-slate-700 text-slate-200 rounded-xl hover:bg-slate-800 transition-all">
+          <ArrowLeft className="w-4 h-4" /> Back to feed
+        </Link>
       </div>
     </div>
   );
@@ -182,10 +189,12 @@ export function ProfileClient() {
                 <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
                   <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-slate-100">{displayName}</h1>
                   {profile.is_verified && (
-                    <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 text-white bg-emerald-500 shadow-lg shadow-emerald-500/50">✓</span>
+                    <BadgeCheck className="w-6 h-6 sm:w-7 sm:h-7 text-emerald-400 fill-emerald-400/20 shrink-0" />
                   )}
                   {profile.is_private && (
-                    <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border border-slate-700 bg-slate-800/50 text-slate-400">🔒 Private</span>
+                    <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border border-slate-700 bg-slate-800/50 text-slate-400">
+                      <Lock className="w-3 h-3" /> Private
+                    </span>
                   )}
                   <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-400">{profile.role}</span>
                 </div>
@@ -194,19 +203,28 @@ export function ProfileClient() {
                 {profile.bio && <p className="text-sm sm:text-base leading-relaxed mb-4 sm:mb-6 max-w-2xl text-slate-300">{profile.bio}</p>}
 
                 <div className="flex flex-wrap gap-x-4 sm:gap-x-6 gap-y-2 sm:gap-y-3 mb-4 sm:mb-6 text-xs sm:text-sm text-slate-400">
-                  {profile.location && <span className="flex items-center gap-2">📍 {profile.location}</span>}
+                  {profile.location && (
+                    <span className="flex items-center gap-1.5">
+                      <MapPin className="w-3.5 h-3.5 text-slate-500 shrink-0" /> {profile.location}
+                    </span>
+                  )}
                   {profile.website && (
                     <a
                       href={profile.website.startsWith("http") ? profile.website : `https://${profile.website}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-emerald-400 hover:text-emerald-300 transition-colors"
+                      className="flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 transition-colors"
                     >
-                      🔗 {profile.website.replace(/^https?:\/\//, "")}
+                      <Link2 className="w-3.5 h-3.5 shrink-0" />
+                      {profile.website.replace(/^https?:\/\//, "")}
                     </a>
                   )}
-                  <span className="flex items-center gap-2">📅 Joined {joinDate}</span>
-                  <span className="flex items-center gap-2 break-all">✉️ {profile.email}</span>
+                  <span className="flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5 text-slate-500 shrink-0" /> Joined {joinDate}
+                  </span>
+                  <span className="flex items-center gap-1.5 break-all">
+                    <Mail className="w-3.5 h-3.5 text-slate-500 shrink-0" /> {profile.email}
+                  </span>
                 </div>
 
                 {/* Stats */}
@@ -238,18 +256,18 @@ export function ProfileClient() {
               {/* Edit Button */}
               <button
                 onClick={() => { setTab("edit"); setSaveError(""); }}
-                className="px-5 py-2.5 sm:px-6 sm:py-3 text-sm font-semibold bg-slate-800/50 border border-slate-700 text-slate-200 rounded-xl hover:bg-slate-800 hover:border-emerald-500/50 transition-all flex-shrink-0 self-start"
+                className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold bg-slate-800/50 border border-slate-700 text-slate-200 rounded-xl hover:bg-slate-800 hover:border-emerald-500/50 transition-all flex-shrink-0 self-start"
               >
-                ✏️ Edit profile
+                <Pencil className="w-4 h-4" /> Edit profile
               </button>
             </div>
           </div>
 
           {/* AI Interests */}
           {profile.ai_interests && profile.ai_interests.length > 0 && (
-            <div className="px-8 py-6 mb-6 bg-slate-900/80 border border-slate-700/50 rounded-2xl backdrop-blur-xl">
+            <div className="px-5 sm:px-8 py-5 sm:py-6 mb-6 bg-slate-900/80 border border-slate-700/50 rounded-2xl backdrop-blur-xl">
               <p className="text-xs font-bold uppercase tracking-widest mb-4 text-emerald-400 flex items-center gap-2">
-                <span>✦</span> AI Interests
+                <Sparkles className="w-3.5 h-3.5" /> AI Interests
               </p>
               <div className="flex flex-wrap gap-2.5">
                 {profile.ai_interests.map((t) => (
@@ -265,8 +283,8 @@ export function ProfileClient() {
           )}
 
           {saveSuccess && (
-            <div className="anim-fade-up flex items-center gap-3 px-6 py-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 text-sm text-emerald-400 mb-6 shadow-lg shadow-emerald-500/10">
-              <span className="text-xl">✓</span>
+            <div className="anim-fade-up flex items-center gap-3 px-5 py-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 text-sm text-emerald-400 mb-6 shadow-lg shadow-emerald-500/10">
+              <CheckCircle className="w-5 h-5 shrink-0" />
               <span className="font-semibold">Profile updated successfully</span>
             </div>
           )}
@@ -277,13 +295,13 @@ export function ProfileClient() {
               <button
                 key={t}
                 onClick={() => setTab(t)}
-                className={`flex-1 py-4 px-6 text-sm font-bold uppercase tracking-wider rounded-xl transition-all ${
+                className={`flex-1 flex items-center justify-center gap-2 py-3.5 px-4 text-sm font-bold uppercase tracking-wider rounded-xl transition-all ${
                   tab === t
                     ? "bg-emerald-500/10 border-2 border-emerald-500/50 text-emerald-400 shadow-lg shadow-emerald-500/10"
                     : "bg-slate-900/50 border-2 border-slate-800 text-slate-500 hover:border-slate-700 hover:text-slate-400"
                 }`}
               >
-                {t === "edit" ? "✏️ Edit Profile" : "🔒 Security"}
+                {t === "edit" ? <><Pencil className="w-4 h-4" /> Edit Profile</> : <><ShieldCheck className="w-4 h-4" /> Security</>}
               </button>
             ))}
           </div>
@@ -292,7 +310,7 @@ export function ProfileClient() {
           {tab === "edit" && (
             <div className="p-5 sm:p-10 bg-slate-900/80 border border-slate-700/50 rounded-2xl backdrop-blur-xl shadow-2xl anim-fade-up">
               <h2 className="text-xl sm:text-2xl font-bold text-slate-100 mb-6 flex items-center gap-3">
-                <span>✏️</span> Edit Your Profile
+                <Pencil className="w-5 h-5 text-emerald-400" /> Edit Your Profile
               </h2>
               <form onSubmit={handleSave} className="flex flex-col gap-6">
 
@@ -369,8 +387,10 @@ export function ProfileClient() {
                   disabled={saving}
                   className="px-8 py-3 text-sm font-semibold bg-emerald-500 hover:bg-emerald-600 text-slate-950 rounded-xl transition-all shadow-lg shadow-emerald-500/20 disabled:opacity-60 flex items-center gap-2"
                 >
-                  {saving && <span className="anim-spin w-4 h-4 rounded-full border-2 border-slate-950/30 border-t-slate-950" />}
-                  {saving ? "Saving…" : "💾 Save changes"}
+                  {saving
+                    ? <><span className="anim-spin w-4 h-4 rounded-full border-2 border-slate-950/30 border-t-slate-950" /> Saving…</>
+                    : <><Save className="w-4 h-4" /> Save changes</>
+                  }
                 </button>
               </div>
             </form>
@@ -381,7 +401,7 @@ export function ProfileClient() {
           {tab === "security" && (
             <div className="p-5 sm:p-10 bg-slate-900/80 border border-slate-700/50 rounded-2xl backdrop-blur-xl shadow-2xl anim-fade-up">
               <h2 className="text-xl sm:text-2xl font-bold text-slate-100 mb-3 flex items-center gap-3">
-                <span>🔒</span> Security Settings
+                <ShieldCheck className="w-5 h-5 text-emerald-400" /> Security Settings
               </h2>
               <p className="text-sm mb-8 text-slate-400">Change your password. You'll stay logged in on this device.</p>
 
@@ -422,7 +442,7 @@ export function ProfileClient() {
               {pwError && <div className="px-4 py-3 rounded-xl border border-red-500/25 bg-red-500/10 text-sm text-red-400">{pwError}</div>}
               {pwSuccess && (
                 <div className="flex items-center gap-2 px-4 py-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-sm text-emerald-400">
-                  ✓ Password updated successfully
+                  <CheckCircle className="w-4 h-4 shrink-0" /> Password updated successfully
                 </div>
               )}
 
@@ -431,26 +451,28 @@ export function ProfileClient() {
                 disabled={pwSaving}
                 className="px-8 py-3 text-sm font-semibold bg-emerald-500 hover:bg-emerald-600 text-slate-950 rounded-xl transition-all shadow-lg shadow-emerald-500/20 disabled:opacity-60 flex items-center gap-2 w-fit"
               >
-                {pwSaving && <span className="anim-spin w-4 h-4 rounded-full border-2 border-slate-950/30 border-t-slate-950" />}
-                {pwSaving ? "Updating…" : "🔐 Update password"}
+                {pwSaving
+                  ? <><span className="anim-spin w-4 h-4 rounded-full border-2 border-slate-950/30 border-t-slate-950" /> Updating…</>
+                  : <><KeyRound className="w-4 h-4" /> Update password</>
+                }
               </button>
             </form>
 
               {/* Danger zone */}
               <div className="mt-12 pt-8 border-t border-slate-700/50">
                 <p className="text-xs font-bold uppercase tracking-widest mb-5 text-red-400 flex items-center gap-2">
-                  <span>⚠️</span> Danger zone
+                  <AlertTriangle className="w-3.5 h-3.5" /> Danger zone
                 </p>
-                <div className="flex items-center justify-between p-6 rounded-xl border border-red-500/20 bg-red-500/5">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 sm:p-6 rounded-xl border border-red-500/20 bg-red-500/5">
                   <div>
                     <p className="text-base font-semibold text-slate-200 mb-1">Log out everywhere</p>
                     <p className="text-sm text-slate-500">Clears all tokens and redirects to login</p>
                   </div>
                   <button
                     onClick={handleLogout}
-                    className="px-6 py-3 text-sm font-bold rounded-xl border border-red-500/30 text-red-400 hover:bg-red-500/10 hover:border-red-500/50 transition-all duration-200"
+                    className="flex items-center gap-2 px-5 py-2.5 text-sm font-bold rounded-xl border border-red-500/30 text-red-400 hover:bg-red-500/10 hover:border-red-500/50 transition-all shrink-0"
                   >
-                    🚪 Log out
+                    <LogOut className="w-4 h-4" /> Log out
                   </button>
                 </div>
               </div>

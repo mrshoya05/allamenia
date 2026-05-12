@@ -2,7 +2,10 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { MessageCircle, Search, X } from "lucide-react";
+import {
+  MessageCircle, Search, X, User, Pencil, Home,
+  Settings, LogOut, Bell,
+} from "lucide-react";
 import { NotificationBell } from "../notifications/NotificationBell";
 import { useWs } from "@/contexts/WebSocketContext";
 
@@ -98,9 +101,10 @@ export function AppNavbar() {
               </button>
 
               {open && (
-                <div className="absolute right-0 top-[calc(100%+8px)] w-64 bg-slate-900/95 border border-slate-700/50 rounded-2xl backdrop-blur-xl shadow-2xl shadow-black/50 anim-fade-up z-50 overflow-hidden">
-                  <div className="px-5 py-4 border-b border-slate-700/50 bg-gradient-to-br from-emerald-500/10 to-transparent">
-                    <div className="flex items-center gap-3 mb-2">
+                <div className="absolute right-0 top-[calc(100%+8px)] w-72 bg-slate-900/95 border border-slate-700/50 rounded-2xl backdrop-blur-xl shadow-2xl shadow-black/50 anim-fade-up z-50 overflow-hidden">
+                  {/* Profile header */}
+                  <div className="px-4 py-4 border-b border-slate-700/50 bg-gradient-to-br from-emerald-500/10 to-transparent">
+                    <div className="flex items-center gap-3">
                       <NavAvatar name={displayName} url={profile?.avatar_url} />
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-bold text-slate-100 truncate">{displayName}</p>
@@ -109,37 +113,43 @@ export function AppNavbar() {
                     </div>
                   </div>
 
-                  <div className="py-2">
+                  {/* Nav items */}
+                  <div className="py-1.5">
                     {[
-                      { href: "/profile", icon: "👤", label: "View profile", desc: "See your public profile" },
-                      { href: "/profile", icon: "✏️", label: "Edit profile", desc: "Update your info" },
-                      { href: "/feed", icon: "🏠", label: "Home feed", desc: "Back to timeline" },
-                      { href: "#", icon: "⚙️", label: "Settings", desc: "Preferences & privacy" },
+                      { href: "/profile", icon: User, label: "View profile", desc: "See your public profile" },
+                      { href: "/profile", icon: Pencil, label: "Edit profile", desc: "Update your info" },
+                      { href: "/feed", icon: Home, label: "Home feed", desc: "Back to timeline" },
+                      { href: "#", icon: Settings, label: "Settings", desc: "Preferences & privacy" },
                     ].map((item) => (
                       <Link
                         key={item.label}
                         href={item.href}
                         onClick={() => setOpen(false)}
-                        className="flex items-start gap-3 px-4 py-3 text-sm hover:bg-slate-800/60 transition-all group"
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-slate-800/60 transition-all group"
                       >
-                        <span className="text-lg mt-0.5 group-hover:scale-110 transition-transform">{item.icon}</span>
-                        <div className="flex-1">
-                          <p className="font-semibold text-slate-200 group-hover:text-emerald-400 transition-colors">{item.label}</p>
-                          <p className="text-xs text-slate-600 mt-0.5">{item.desc}</p>
+                        <div className="w-8 h-8 rounded-lg bg-slate-800/60 flex items-center justify-center shrink-0 group-hover:bg-emerald-500/10 transition-colors">
+                          <item.icon className="w-4 h-4 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-semibold text-slate-200 group-hover:text-emerald-400 transition-colors text-[13px]">{item.label}</p>
+                          <p className="text-[11px] text-slate-600 truncate">{item.desc}</p>
                         </div>
                       </Link>
                     ))}
                   </div>
 
-                  <div className="border-t border-slate-700/50 py-2 bg-slate-950/30">
+                  {/* Logout */}
+                  <div className="border-t border-slate-700/50 py-1.5 bg-slate-950/30">
                     <button
                       onClick={logout}
-                      className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all cursor-pointer group"
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all group"
                     >
-                      <span className="text-lg group-hover:scale-110 transition-transform">🚪</span>
-                      <div className="flex-1 text-left">
-                        <p className="font-semibold">Log out</p>
-                        <p className="text-xs text-slate-600 mt-0.5">Sign out of your account</p>
+                      <div className="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center shrink-0">
+                        <LogOut className="w-4 h-4 text-red-400 group-hover:text-red-300 transition-colors" />
+                      </div>
+                      <div className="flex-1 text-left min-w-0">
+                        <p className="font-semibold text-[13px]">Log out</p>
+                        <p className="text-[11px] text-slate-600">Sign out of your account</p>
                       </div>
                     </button>
                   </div>

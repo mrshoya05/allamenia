@@ -136,7 +136,7 @@ export function UserCard({ user, followStatus = "none", onFollow, onUnfollow, on
         <div className="relative">
           <button
             onClick={() => setShowMenu(!showMenu)}
-            className="p-2 rounded-full hover:bg-[#1d1f23] text-[#71767b] opacity-0 group-hover:opacity-100 transition-all"
+            className="p-2 rounded-full hover:bg-[#1d1f23] text-[#71767b] hover:text-[#e7e9ea] transition-all"
           >
             <MoreHorizontal className="w-4 h-4" />
           </button>
