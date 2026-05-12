@@ -264,8 +264,8 @@ def get_following(username: str, skip: int = 0, limit: int = 20):
     return repo.get_users_by_ids(following_ids)
 
 
-def search_users_service(query: str, skip: int = 0, limit: int = 20):
-    return repo.search_users(query, skip, limit)
+def search_users_service(query: str, skip: int = 0, limit: int = 20, current_user_id: str = None):
+    return repo.search_users(query, skip, limit, current_user_id)
 
 
 def get_suggested_users(exclude_ids: list, limit: int = 10):

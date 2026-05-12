@@ -85,7 +85,8 @@ def search_users(
     limit: int = Query(default=20, le=50),
     current_user=Depends(get_current_user)
 ):
-    users = service.search_users_service(q, skip, limit)
+    current_user_id = str(current_user["_id"])
+    users = service.search_users_service(q, skip, limit, current_user_id)
     return {"results": users, "count": len(users)}
 
 

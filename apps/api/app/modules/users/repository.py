@@ -37,18 +37,46 @@ def get_users_by_ids(user_ids: list) -> list:
     return users
 
 
-def search_users(query: str, skip: int = 0, limit: int = 20) -> list:
-    users = list(collection.find(
-        {
-            "$or": [
-                {"username": {"$regex": query, "$options": "i"}},
-                {"full_name": {"$regex": query, "$options": "i"}},
-            ],
-            "is_deleted": {"$ne": True},
-            "is_banned": {"$ne": True},
-        },
-        {"password": 0}
-    ).skip(skip).limit(limit))
+def search_users(query: str, skip: int = 0, limit: int = 20, current_user_id: str = None) -> list:
+    from bson import ObjectId as _ObjId
+
+    # Collect blocked user IDs in both directions
+    blocked_object_ids = []
+    if current_user_id:
+        try:
+            me = collection.find_one({"_id": _ObjId(current_user_id)}, {"blocked_users": 1})
+            blocked_str_ids = me.get("blocked_users", []) if me else []
+
+            # Users who have blocked the current user
+            blockers = list(collection.find({"blocked_users": current_user_id}, {"_id": 1}))
+            blocked_str_ids += [str(b["_id"]) for b in blockers]
+
+            for bid in blocked_str_ids:
+                try:
+                    blocked_object_ids.append(_ObjId(bid))
+                except Exception:
+                    pass
+
+            # Exclude self
+            try:
+                blocked_object_ids.append(_ObjId(current_user_id))
+            except Exception:
+                pass
+        except Exception:
+            pass
+
+    query_filter: dict = {
+        "$or": [
+            {"username": {"$regex": query, "$options": "i"}},
+            {"full_name": {"$regex": query, "$options": "i"}},
+        ],
+        "is_deleted": {"$ne": True},
+        "is_banned": {"$ne": True},
+    }
+    if blocked_object_ids:
+        query_filter["_id"] = {"$nin": blocked_object_ids}
+
+    users = list(collection.find(query_filter, {"password": 0}).skip(skip).limit(limit))
     for u in users:
         u["id"] = str(u.pop("_id"))
     return users
