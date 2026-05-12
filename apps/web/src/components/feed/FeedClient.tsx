@@ -97,10 +97,10 @@ export function FeedClient({ initialPosts, trending, suggestions }: Props) {
 
       <AppNavbar />
 
-      <div className="max-w-7xl mx-auto px-8 pt-22 pb-12 grid lg:grid-cols-[1fr_340px] gap-5 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 pt-20 sm:pt-22 pb-12 grid lg:grid-cols-[1fr_340px] gap-5 relative z-10">
         <div>
           {/* Compose */}
-          <div className="p-6 mb-4 bg-slate-900/50 border border-slate-800 rounded-xl backdrop-blur-sm">
+          <div className="p-4 sm:p-6 mb-4 bg-slate-900/50 border border-slate-800 rounded-xl backdrop-blur-sm">
             <div className="flex gap-3.5">
               <Avatar name="Me" size={40} index={0} />
               <div className="flex-1">

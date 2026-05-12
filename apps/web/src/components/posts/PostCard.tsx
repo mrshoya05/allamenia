@@ -206,7 +206,7 @@ export function PostCard({ post, onLike, onUnlike, onRepost, onBookmark, onDelet
 
           {/* Content */}
           {post.content && (
-            <div className="mb-3 ml-[60px]">
+            <div className="mb-3 ml-[52px] sm:ml-[60px]">
               <p className="text-slate-100 text-[15px] leading-normal whitespace-pre-wrap break-words">
                 {post.content}
               </p>
@@ -215,20 +215,20 @@ export function PostCard({ post, onLike, onUnlike, onRepost, onBookmark, onDelet
 
           {/* Media */}
           {post.media && post.media.length > 0 && (
-            <div className="mb-3 ml-[60px] rounded-2xl overflow-hidden border border-slate-800">
+            <div className="mb-3 ml-[52px] sm:ml-[60px] rounded-2xl overflow-hidden border border-slate-800">
               <PostMedia media={post.media} />
             </div>
           )}
 
           {/* Link Preview */}
           {post.link_preview && (
-            <div className="mb-3 ml-[60px]">
+            <div className="mb-3 ml-[52px] sm:ml-[60px]">
               <LinkPreview preview={post.link_preview} />
             </div>
           )}
 
           {/* Actions */}
-          <div className="ml-[60px]">
+          <div className="ml-[52px] sm:ml-[60px]">
             <PostActions
               post={post}
               onLike={onLike}

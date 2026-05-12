@@ -162,38 +162,38 @@ export function ProfileClient() {
       {/* Full width container */}
       <div className="relative z-10 w-full pt-20 pb-12">
         {/* Cover Section - Full Width */}
-        <div className="relative w-full h-80" style={coverStyle}>
+        <div className="relative w-full h-48 sm:h-64 md:h-80" style={coverStyle}>
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent" />
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 via-cyan-500 to-pink-500 opacity-70" />
         </div>
 
         {/* Content Container */}
-        <div className="max-w-7xl mx-auto px-6 -mt-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 -mt-16 sm:-mt-24">
           {/* Profile Header Card */}
-          <div className="bg-slate-900/80 border border-slate-700/50 rounded-2xl backdrop-blur-xl shadow-2xl p-8 mb-6">
-            <div className="flex flex-col lg:flex-row gap-8 items-start">
+          <div className="bg-slate-900/80 border border-slate-700/50 rounded-2xl backdrop-blur-xl shadow-2xl p-5 sm:p-8 mb-6">
+            <div className="flex flex-col sm:flex-row gap-5 sm:gap-8 items-start">
               {/* Avatar */}
               <div className="flex-shrink-0">
-                <Avatar name={displayName} url={profile.avatar_url} size={140} />
+                <Avatar name={displayName} url={profile.avatar_url} size={96} />
               </div>
 
               {/* Info */}
               <div className="flex-1 min-w-0">
-                <div className="flex flex-wrap items-center gap-3 mb-2">
-                  <h1 className="text-4xl font-bold tracking-tight text-slate-100">{displayName}</h1>
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
+                  <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-slate-100">{displayName}</h1>
                   {profile.is_verified && (
-                    <span className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 text-white bg-emerald-500 shadow-lg shadow-emerald-500/50">✓</span>
+                    <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 text-white bg-emerald-500 shadow-lg shadow-emerald-500/50">✓</span>
                   )}
                   {profile.is_private && (
-                    <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full border border-slate-700 bg-slate-800/50 text-slate-400">🔒 Private</span>
+                    <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border border-slate-700 bg-slate-800/50 text-slate-400">🔒 Private</span>
                   )}
-                  <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-400">{profile.role}</span>
+                  <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-400">{profile.role}</span>
                 </div>
 
-                <p className="text-base mb-4 text-slate-500">@{profile.username}</p>
-                {profile.bio && <p className="text-base leading-relaxed mb-6 max-w-2xl text-slate-300">{profile.bio}</p>}
+                <p className="text-sm sm:text-base mb-3 sm:mb-4 text-slate-500">@{profile.username}</p>
+                {profile.bio && <p className="text-sm sm:text-base leading-relaxed mb-4 sm:mb-6 max-w-2xl text-slate-300">{profile.bio}</p>}
 
-                <div className="flex flex-wrap gap-x-6 gap-y-3 mb-6 text-sm text-slate-400">
+                <div className="flex flex-wrap gap-x-4 sm:gap-x-6 gap-y-2 sm:gap-y-3 mb-4 sm:mb-6 text-xs sm:text-sm text-slate-400">
                   {profile.location && <span className="flex items-center gap-2">📍 {profile.location}</span>}
                   {profile.website && (
                     <a
@@ -206,11 +206,11 @@ export function ProfileClient() {
                     </a>
                   )}
                   <span className="flex items-center gap-2">📅 Joined {joinDate}</span>
-                  <span className="flex items-center gap-2">✉️ {profile.email}</span>
+                  <span className="flex items-center gap-2 break-all">✉️ {profile.email}</span>
                 </div>
 
                 {/* Stats */}
-                <div className="flex gap-8">
+                <div className="flex gap-5 sm:gap-8">
                   {[
                     { val: profile.posts_count, label: "Posts", color: "text-emerald-400", href: null },
                     { val: profile.followers_count, label: "Followers", color: "text-cyan-400", href: `/profile/${profile.username}/followers?tab=followers` },
@@ -218,17 +218,17 @@ export function ProfileClient() {
                   ].map(({ val, label, color, href }) => (
                     href ? (
                       <Link key={label} href={href} className="text-center group cursor-pointer">
-                        <div className={`text-3xl font-extrabold tracking-tight leading-none ${color} group-hover:underline`}>
+                        <div className={`text-2xl sm:text-3xl font-extrabold tracking-tight leading-none ${color} group-hover:underline`}>
                           {(val as number).toLocaleString()}
                         </div>
-                        <div className="text-xs font-semibold uppercase tracking-wider mt-1 text-slate-600 group-hover:text-slate-400">{label}</div>
+                        <div className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider mt-1 text-slate-600 group-hover:text-slate-400">{label}</div>
                       </Link>
                     ) : (
                       <div key={label} className="text-center">
-                        <div className={`text-3xl font-extrabold tracking-tight leading-none ${color}`}>
+                        <div className={`text-2xl sm:text-3xl font-extrabold tracking-tight leading-none ${color}`}>
                           {(val as number).toLocaleString()}
                         </div>
-                        <div className="text-xs font-semibold uppercase tracking-wider mt-1 text-slate-600">{label}</div>
+                        <div className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider mt-1 text-slate-600">{label}</div>
                       </div>
                     )
                   ))}
@@ -237,11 +237,8 @@ export function ProfileClient() {
 
               {/* Edit Button */}
               <button
-                onClick={() => {
-                  setTab("edit");
-                  setSaveError("");
-                }}
-                className="px-6 py-3 text-sm font-semibold bg-slate-800/50 border border-slate-700 text-slate-200 rounded-xl hover:bg-slate-800 hover:border-emerald-500/50 transition-all flex-shrink-0"
+                onClick={() => { setTab("edit"); setSaveError(""); }}
+                className="px-5 py-2.5 sm:px-6 sm:py-3 text-sm font-semibold bg-slate-800/50 border border-slate-700 text-slate-200 rounded-xl hover:bg-slate-800 hover:border-emerald-500/50 transition-all flex-shrink-0 self-start"
               >
                 ✏️ Edit profile
               </button>
@@ -293,8 +290,8 @@ export function ProfileClient() {
 
           {/* Edit form */}
           {tab === "edit" && (
-            <div className="p-10 bg-slate-900/80 border border-slate-700/50 rounded-2xl backdrop-blur-xl shadow-2xl anim-fade-up">
-              <h2 className="text-2xl font-bold text-slate-100 mb-6 flex items-center gap-3">
+            <div className="p-5 sm:p-10 bg-slate-900/80 border border-slate-700/50 rounded-2xl backdrop-blur-xl shadow-2xl anim-fade-up">
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-100 mb-6 flex items-center gap-3">
                 <span>✏️</span> Edit Your Profile
               </h2>
               <form onSubmit={handleSave} className="flex flex-col gap-6">
@@ -382,8 +379,8 @@ export function ProfileClient() {
 
           {/* Security tab */}
           {tab === "security" && (
-            <div className="p-10 bg-slate-900/80 border border-slate-700/50 rounded-2xl backdrop-blur-xl shadow-2xl anim-fade-up">
-              <h2 className="text-2xl font-bold text-slate-100 mb-3 flex items-center gap-3">
+            <div className="p-5 sm:p-10 bg-slate-900/80 border border-slate-700/50 rounded-2xl backdrop-blur-xl shadow-2xl anim-fade-up">
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-100 mb-3 flex items-center gap-3">
                 <span>🔒</span> Security Settings
               </h2>
               <p className="text-sm mb-8 text-slate-400">Change your password. You'll stay logged in on this device.</p>

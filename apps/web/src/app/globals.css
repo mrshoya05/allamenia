@@ -94,3 +94,72 @@
 .anim-breathe { animation: breathe 3s ease-in-out infinite; }
 .anim-wave { display: inline-block; animation: wave 2s ease-in-out infinite; }
 .anim-glow { animation: glow-pulse 2s ease-in-out infinite; }
+
+/* ===== UTILITIES ===== */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* ===== FIELD GLASS ===== */
+.field-glass {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(15, 20, 25, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 12px;
+  color: var(--text);
+  font-size: 14px;
+  transition: all 0.2s;
+  backdrop-filter: blur(8px);
+}
+.field-glass:focus {
+  outline: none;
+  border-color: rgba(16, 185, 129, 0.5);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+.field-glass::placeholder {
+  color: var(--text-dim);
+}
+
+/* ===== AUTH STYLES ===== */
+.auth-left {
+  display: flex;
+}
+.glow-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent-glow);
+  animation: breathe 3s ease-in-out infinite;
+}
+.neo-glow {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.05);
+}
+.glass {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  backdrop-filter: blur(8px);
+}
+.dot-grid {
+  background-image: radial-gradient(circle, rgba(148,163,184,0.06) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+.noise::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}

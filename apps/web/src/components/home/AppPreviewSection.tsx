@@ -2,25 +2,25 @@ import { MOCK_POSTS } from "@/lib/constants";
 
 export function AppPreviewSection() {
   return (
-    <section className="py-20">
-      <div className="max-w-7xl mx-auto px-8 grid lg:grid-cols-[1fr_500px] gap-14 items-center">
+    <section className="py-12 sm:py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 grid lg:grid-cols-[1fr_500px] gap-10 lg:gap-14 items-center">
         <div>
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-5 text-xs font-bold tracking-widest text-cyan-500 uppercase bg-slate-900/50 border border-slate-800 rounded-xl">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 sm:mb-5 text-xs font-bold tracking-widest text-cyan-500 uppercase bg-slate-900/50 border border-slate-800 rounded-xl">
             <span>◎</span> Preview
           </div>
-          <h2 className="text-6xl font-bold text-slate-50 tracking-tight leading-[0.95] mb-6">
+          <h2 className="text-4xl sm:text-6xl font-bold text-slate-50 tracking-tight leading-[0.95] mb-4 sm:mb-6">
             See what&apos;s<br />
             <span className="text-cyan-500">inside.</span>
           </h2>
-          <p className="text-base text-slate-400 leading-relaxed max-w-md">
+          <p className="text-sm sm:text-base text-slate-400 leading-relaxed max-w-md">
             A feed that actually works for you. No algorithmic manipulation, no rage-bait.
           </p>
 
-          <div className="flex gap-3 mt-10 flex-wrap">
+          <div className="flex gap-3 mt-8 sm:mt-10 flex-wrap">
             {[["800M+", "Posts shared", "📝"], ["4.9★", "App rating", "⭐"], ["<50ms", "Latency", "⚡"]].map(([v, l, icon]) => (
-              <div key={l} className="p-5 bg-slate-900/50 border border-slate-800 rounded-xl flex-1 min-w-[120px]">
-                <div className="text-xl mb-2">{icon}</div>
-                <div className="text-2xl font-bold text-slate-100 mb-1">{v}</div>
+              <div key={l} className="p-4 sm:p-5 bg-slate-900/50 border border-slate-800 rounded-xl flex-1 min-w-[100px]">
+                <div className="text-lg sm:text-xl mb-1 sm:mb-2">{icon}</div>
+                <div className="text-xl sm:text-2xl font-bold text-slate-100 mb-0.5 sm:mb-1">{v}</div>
                 <div className="text-xs text-slate-500 tracking-wide">{l}</div>
               </div>
             ))}
@@ -40,19 +40,19 @@ export function AppPreviewSection() {
           </div>
 
           {MOCK_POSTS.slice(0, 3).map((post, i) => (
-            <div key={post.id} className="px-5 py-4 border-b border-slate-800 last:border-b-0 flex gap-3">
-              <div className="w-9 h-9 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-xs font-bold text-emerald-500 flex-shrink-0">
+            <div key={post.id} className="px-4 sm:px-5 py-3.5 sm:py-4 border-b border-slate-800 last:border-b-0 flex gap-3">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-xs font-bold text-emerald-500 flex-shrink-0">
                 {post.name.split(" ").map((n: string) => n[0]).join("")}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-1.5 mb-1.5">
+                <div className="flex items-center gap-1.5 mb-1 flex-wrap">
                   <span className="text-sm font-bold text-slate-100">{post.name}</span>
                   {post.verified && <span className="w-4 h-4 rounded-full bg-emerald-500 flex items-center justify-center text-slate-950 text-[8px] font-bold">✓</span>}
                   <span className="text-xs text-slate-600">@{post.handle}</span>
                   <span className="text-xs text-slate-600 ml-auto">{post.time}</span>
                 </div>
                 <p className="text-xs text-slate-400 leading-relaxed">{post.content}</p>
-                <div className="flex gap-4 mt-2.5">
+                <div className="flex gap-4 mt-2">
                   <span className="text-xs text-slate-600">♡ {post.likes.toLocaleString()}</span>
                   <span className="text-xs text-slate-600">◎ {post.comments}</span>
                 </div>
